@@ -1,0 +1,82 @@
+1. SELECT and WHERE
+SELECT title FROM film WHERE release_year Between 2000 AND 2010 ;
+
+This query retrieves the release year of the film's title . It identifies how many films launched between 2000 - 2010.
+
+2. INNER JOIN and ORDER BY
+SELECT film.film_id,language.language_id,language.name,film.title,film.rental_rate
+FROM film 
+INNER JOIN language on film.film_id = language.language_id
+WHERE release_year between 2000 AND 2010
+ORDER BY rental_rate;
+
+This query determines the number of rental rates of different languages in movies between 2000-2010. It can provide insights of  interest in different language movies .
+
+3. LEFT JOIN and LIMIT
+SELECT staff.first_name,staff.last_name,staff.staff_id,payment.amount
+FROM staff
+LEFT JOIN payment ON staff.staff_id = payment.staff_id
+Order BY amount DESC
+LIMIT 20;
+
+This query identifies the top 20 staff who have completed the largest payments. This can be useful for estimating the performance of staff.
+
+4. MAX & MIN
+Select Max(amount) as Max_amount, MIN(amount) as Min_amount 
+From payment
+
+This query determines the max amount and the min amount of DVD rental.
+
+5. COUNT, BETWEEN, AND GROUP BY
+SELECT rental_id , count(*) AS Rental_Count
+FROM rental
+WHERE rental_date Between '2000-01-01' and '2010-12-31'
+GROUP BY rental_id
+ORDER BY Rental_Id DESC;
+
+This query calculates the number of rentals made in between 2000-2010. It can help identify trends or customer habits during the past 10 years.
+
+6. DISTINCT, IN
+SELECT DISTINCT title
+FROM film
+WHERE rating IN('G');
+
+This query shows that the movie has a rating “G”. It helps identify the great movie.
+
+7. CASE Statement
+SELECT title,  
+       CASE 
+         WHEN AVG(rental_rate) >2  THEN 'good'
+         ELSE 'bad'
+       END AS actual_film_rating 
+FROM film 
+GROUP BY title
+ORDER BY title;
+
+This query calculates the average rating of each film and the rental rate of each movie. It helps to determine if the movie rating is really fit with the public's choices.
+
+8. Window Function*
+SELECT customer_id, staff_id, amount, 
+       RANK() OVER (PARTITION BY customer_id ORDER BY staff_id) as preformance_rank
+FROM payment
+ORDER BY preformance_rank DESC;
+
+This query assigns a rank to each staff member for a specific customer, based on the payment amount.
+
+9.Full Outer Join
+SELECT actor.first_name, actor.last_name, film.title
+FROM actor
+FULL OUTER JOIN film ON actor.actor_ID = film.film_ID
+order by title
+
+This query determines the actor of each film. It helps to categorize the actors of each film. 
+
+10. CROSS JOIN, LIMIT
+SELECT DISTINCT customer.customer_id,customer.email,payment.rental_id,payment.amount
+FROM customer
+CROSS JOIN payment
+GROUP by customer.customer_id, payment.rental_id,payment.amount
+order by amount DESC
+LIMIT 100
+
+This query returns a combination of every film title with every category name and rental rate, limiting the results to the first 100 records.
